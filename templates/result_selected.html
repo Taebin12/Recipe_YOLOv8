@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Object Detection Results</title>
+    <style>
+        body {
+            background-color: #ffffff; /* White background color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            height: auto;
+            overflow-y: auto;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 0px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 80%;
+        }
+
+        .scrollable-dropdown {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Object Detection Results</h1>
+    <img src="{{ img_url }}" alt="Detected Objects">
+    <br><br><br>
+    <form class="search-box" method="POST" action="/recipes">
+        <fieldset>  
+            <label for="selected_ingredients">Select Ingredients:</label><br>
+            <select id="selected_ingredients" name="selected_ingredients" class="scrollable-dropdown">
+                    {% set detected_ingredients = {} %}
+                    {% for result in detections %}
+                        {% set object_name = result.object_type %}
+                        {% if object_name not in detected_ingredients %}
+                            {% set _ = detected_ingredients.update({object_name: 1}) %}
+                        {% else %}
+                            {% set _ = detected_ingredients.update({object_name: detected_ingredients[object_name] + 1}) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for object_name, count in detected_ingredients.items() %}
+                        <option value="{{ object_name }}">{{ object_name }}</option>
+                    {% endfor %}
+            </select>
+            <br><br>
+
+            <label for="usertime">Max Cooking Time (in minutes):</label><br>
+            <input type="number" id="usertime" name="usertime" min="1" required>
+            <br><br>
+
+            <label for="usercuisine">Cuisine Origin:</label><br>
+            <select id="usercuisine" name="usercuisine" required>
+                <option value="dish">Dish</option>
+                <option value="dessert">Dessert</option>
+            </select>
+            <br><br>
+
+            <label for="userhealth">Healthiness:</label><br>
+            <select id="userhealth" name="userhealth" required>
+                <option value="true">Healthy</option>
+                <option value="false">Not Necessarily Healthy</option>
+            </select>
+            <br><br>
+
+            <label for="user_vege_vegan">Vegetarian / Vegan:</label><br>
+            <select id="user_vege_vegan" name="user_vege_vegan" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <br><br>
+
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+</body>

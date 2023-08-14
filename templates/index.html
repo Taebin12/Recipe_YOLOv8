@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 90vh; /* Changed to 90% of the viewport height */
+      }
+
+      .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .btn-file-select {
+        width: 225px;
+        height: 150px; /* Reduced the height to 2/3 of the original size */
+        border: 2px solid black;
+        background-color: white;
+        color: black;
+        padding: 15px; /* Reduced the padding for a smaller size */
+        font-size: 18px; /* Reduced the font size */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+      }
+
+      .btn-upload {
+        width: 120px;
+        height: 50px; /* Reduced the height to 2/3 of the original size */
+        background-color: black;
+        color: white;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+      }
+
+      .text-muted {
+        margin-top: 20px;
+      }
+
+      .h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* 로그인 기능 부분 스타일 추가 */
+      .login-container {
+        width: 33.33%; /* 1/3 크기로 설정 */
+        height: 40px; /* 높이를 40px로 설정 */
+        margin: 0 auto; /* 가운데 정렬 */
+        align-items: flex-end; /* 아래로 정렬 */
+        /* Applying .small-btn styles here */
+        width: 40px; /* 원하는 크기로 조정 */
+        height: 30px; /* 원하는 크기로 조정 */
+        font-size: 10px; /* 원하는 크기로 조정 */
+      }
+    </style>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <title>Recipe recommendations system</title>
+  </head>
+  <body class="text-center" style="padding-top: 50px; padding-bottom: 50px;"> <!-- 상단과 하단에 50px씩 공백 추가 -->
+    <h1 class="h1 mb-3 font-weight-bold">Recipe recommendations system</h1>
+    <img class="mb-2" src="/static/logo_F.jpg" alt="" width="300">
+    <form class="form-signin" method="post" enctype="multipart/form-data">
+         {{ form.csrf_token }}
+        <!-- Change the label to "Select the ingredients Photo" -->
+        <label for="inputfile" class="btn btn-file-select" style="margin-top: 10px;"> <!-- Added inline style to adjust the margin-top -->
+          Select the ingredients Photo
+          <input type="file" name="file" class="form-control-file d-none" id="inputfile">
+        </label>
+        <br/>
+        <!-- Change the button height and padding to reduce the vertical size -->
+        <button class="btn btn-upload btn-block" type="submit" style="height: 40px; padding: 8px;">Upload</button> <!-- Added inline style to adjust height and padding -->
+        <hr>
+        <p class="mt-5 mb-3 text-muted">Zero_base_13_DL _Team4</p>
+    </form>
+    <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      $('#inputfile').bind('change', function() {
+          let fileSize = this.files[0].size/1024/1024; 
+          if (fileSize > 10) {
+            $("#inputfile").val(null);
+            alert('The file size is too large, please reduce the file size or compress the image and try again. ')
+            return
+          }
+          let ext = $('#inputfile').val().split('.').pop().toLowerCase();
+          if($.inArray(ext, ['jpg','jpeg','png']) == -1) {
+            $("#inputfile").val(null);
+            alert('Only JPEG/JPG format files can be uploaded.');
+          }
+      });
+    </script>
+       <!-- 로그인 폼 추가 -->
+    <div class="login-container">
+      <h1>Login</h1>
+      <form method="POST">
+          <div class="row mt-5">
+        {{ form.csrf_token }}
+        <div class="form-group">
+          {{ form.userid.label("USER") }}
+          {{ form.userid(class="form-control", placeholder="USER") }}
+        </div>
+        <div class="form-group">
+          {{ form.password.label("Password") }}
+          {% if form.password.errors %}
+          {{ form.password.errors.0 }}
+          {% endif %}
+          {{ form.password(class="form-control", placeholder="Password") }}
+        <br/>
+       <div class="form-group d-flex justify-content-between">
+            <a href="/login" class="btn btn-primary small-btn  mr-3">login</a>
+            <a href="/register" class="btn btn-primary small-btn">Register</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- 로그인 사용자 정보 추가 -->
+    <div class="container mt-3"> <!-- 상단에 3px 마진 추가 -->
+      <div class="form-group">
+        {% if userid %}
+        {{ userid }}<a>Hello!</a><br>
+        <a href="/logout">Logout</a>
+        {% endif %}
+      </div>
+    </div>
+      
+  </body>
+</html>

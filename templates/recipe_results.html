@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Search Results</title>
+    <style>
+        body {
+            background-color: #ffffff; /* White background color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding-bottom: 20px; /* Added padding at the bottom to create some space */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            color: #0000EE; /* Link color */
+            text-decoration: none; /* Remove underline */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Add underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipe Search Results</h1>
+    <table>
+        <tr>
+            <th>Recipe Image</th>
+            <th>Recipe Name</th>
+            <th>Ingredients</th>
+            <th>Cooking Time</th>
+            <th>Recipe Link</th>
+        </tr>
+        {% for recipe in data %}
+        <tr>
+            <td><img src="{{ recipe['recipe']['image'] }}" alt="{{ recipe['recipe']['label'] }}" style="width:100px;height:100px;"></td>
+            <td>{{ recipe['recipe']['label'] }}</td>
+            <td>
+                <ul>
+                {% for ingredient in recipe['recipe']['ingredientLines'] %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>{{ recipe['recipe']['totalTime'] }} minutes</td>
+            <td><a href="{{ recipe['recipe']['url'] }}" target="_blank">Go to Recipe</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
